@@ -16,7 +16,8 @@ class UpdateUsersTable extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->string('phone_number');
             $table->string('verification_code');
-            $table->boolean('is_active');
+            $table->boolean('is_active')->default(true);
+            $table->dropColumn('email');
         });
     }
 
@@ -31,6 +32,7 @@ class UpdateUsersTable extends Migration
             $table->dropColumn('phone_number');
             $table->dropColumn('verification_code');
             $table->dropColumn('is_active');
+            $table->string('email')->unique();
         });
     }
 }

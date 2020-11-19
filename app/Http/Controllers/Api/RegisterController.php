@@ -20,6 +20,7 @@ class RegisterController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'phone_number' => 'required|unique:users',
+            'name' => 'required',
             'password' => 'required|min:8',
             'c_password' => 'required|same:password',
         ]);
@@ -29,8 +30,10 @@ class RegisterController extends BaseController
         }
 
         $input = $request->all();
+
+        $input['phone_number'] = $input['phone_number'];
         $input['password'] = bcrypt($input['password']);
-        $input['name'] = $request->has('name') ? $request->input('name') : "guest";
+        $input['name'] = $request->input('name');
         // @todo: Handle Verification 
         $input['verification_code'] = '1234';
 
