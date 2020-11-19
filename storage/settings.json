@@ -1,0 +1,7 @@
+{
+    "cost_less_10": "30",
+    "cost_10_25": "45",
+    "cost_25_55": "65",
+    "cost_more_55": "100",
+    "another": "testing"
+}
