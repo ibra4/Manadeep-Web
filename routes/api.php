@@ -29,3 +29,12 @@ Route::middleware('auth:api')->post('phone/verify', 'App\Http\Controllers\Api\Re
 Route::middleware('auth:api')->get('/user', function () {
     return auth('api')->user();
 });
+
+/**
+ * Get Settings
+ */
+Route::get('/settings', 'App\Http\Controllers\Api\SettingsController@get');
+/**
+ * Update Settings
+ */
+Route::middleware('can:manage-website')->post('/settings/update', 'App\Http\Controllers\Api\SettingsController@update');

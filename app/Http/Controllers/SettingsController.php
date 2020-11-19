@@ -12,7 +12,7 @@ class SettingsController extends Controller
         return view('admin.settings')->with('settings', $settings);
     }
 
-    public function updateSettings(Request $request)
+    public function update(Request $request)
     {
         $encoded = json_encode($request->except('_token'), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         file_put_contents(storage_path('settings.json'), $encoded);
