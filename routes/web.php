@@ -20,3 +20,5 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::name('settings')->middleware('can:manage-website')->get('/settings', [App\Http\Controllers\SettingsController::class, 'index'])->name('home');
