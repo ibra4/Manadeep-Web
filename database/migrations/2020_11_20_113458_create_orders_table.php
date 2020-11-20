@@ -22,10 +22,10 @@ class CreateOrdersTable extends Migration
             $table->decimal('cost');
             $table->bigInteger('driver_id')->unsigned()->nullable()->default(null);
             $table->bigInteger('user_id')->unsigned();
-            $table->enum('status', ['in_propgress', 'driving', 'from_reached', 'finished', 'manadeep']);
-            $table->boolean('payer');
+            $table->enum('status', ['canceled', 'in_propgress', 'driving', 'from_reached', 'finished', 'manadeep']);
+            $table->enum('payer', ['sender', 'reciever']);
+            $table->enum('package', ['electronic_devices', 'gifts', 'clothes', 'food', 'documents', 'heavy_weight']);
             $table->string('comments');
-            $table->string('package');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

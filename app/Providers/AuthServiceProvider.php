@@ -37,7 +37,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('add-order', function ($user) {
-            return $user->hasAnyRole(['user', 'admin']);
+            return $user->hasAnyRoles(['user', 'admin']);
         });
 
         Gate::define('take-order', function ($user) {

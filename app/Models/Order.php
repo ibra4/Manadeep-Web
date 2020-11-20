@@ -11,11 +11,13 @@ class Order extends Model
 
     public function driver()
     {
-        return $this->belongsTo('App\\Models\\Users', 'driver_id');
+        return $this->belongsTo('App\\Models\\User', 'driver_id');
     }
 
     public function user()
     {
-        return $this->belongsTo('App\\Models\\Users', 'user_id');
+        return $this->belongsTo('App\\Models\\User', 'user_id');
     }
+
+    
 }

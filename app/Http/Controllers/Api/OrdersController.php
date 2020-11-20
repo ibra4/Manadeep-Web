@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 
 class OrdersController extends BaseController
 {
+    public function __construct()
+    {
+        $this->middleware('can:add-order')->only('add');
+        $this->middleware('can:take-order')->only(['take', 'fromReached', 'finished', 'manadeep']);
+        $this->middleware('can:manage-website')->only(['getAll']);
+    }
+
     public function getAll(Request $request)
     {
         $orders = Order::all();
@@ -16,7 +23,14 @@ class OrdersController extends BaseController
     public function get(Request $request)
     {
         $user_id = auth('api')->user()->id;
-        $orders = Order::where('user_id', $user_id)->get();
+        $orders = Order::where('user_id', $user_id)->with([
+            'user' => function ($q) {
+                $q->select('id', 'name', 'phone_number');
+            },
+            'driver' => function ($q) {
+                $q->select('id', 'name', 'phone_number');
+            }
+        ])->get();
         return $this->sendResponse($orders, 'success');
     }
 
@@ -37,8 +51,8 @@ class OrdersController extends BaseController
 
         $order = new Order();
 
-        $order->from = $request->input('fromLat') + ',' + $request->input('fromLng');
-        $order->to = $request->input('toLat') + ',' + $request->input('toLng');
+        $order->from = $request->input('fromLat') . ',' . $request->input('fromLng');
+        $order->to = $request->input('toLat') . ',' . $request->input('toLng');
         $order->fromName = $request->input('fromName');
         $order->toName = $request->input('toName');
         $order->cost = $request->input('cost');
@@ -72,7 +86,7 @@ class OrdersController extends BaseController
 
         $this->sendResponse($order, 'order reached from');
     }
-    
+
     public function finished(Request $request, $id)
     {
         $order = Order::find($id);

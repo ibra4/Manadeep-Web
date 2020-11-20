@@ -40,31 +40,36 @@ Route::get('/settings', 'App\Http\Controllers\Api\SettingsController@get');
 Route::middleware('can:manage-website')->post('/settings/update', 'App\Http\Controllers\Api\SettingsController@update');
 
 /**
- * Add Order
- */
-Route::middleware('can:add-order')->post('/orders/add', 'App\Http\Controllers\Api\OrderssController@add');
-
-/**
  * Get orders for user
  */
-Route::middleware('auth:api')->post('/orders/get', 'App\Http\Controllers\Api\OrderssController@add');
+Route::middleware('auth:api')->get('/orders', 'App\Http\Controllers\Api\OrdersController@get');
+
+/**
+ * Get All orders
+ */
+Route::middleware('auth:api')->get('/orders/all', 'App\Http\Controllers\Api\OrdersController@getAll');
+
+/**
+ * Add Order
+ */
+Route::middleware('auth:api')->post('/orders/add', 'App\Http\Controllers\Api\OrdersController@add');
 
 /**
  * Take Order
  */
-Route::middleware('can:take-order')->post('/orders/take/{id?}', 'App\Http\Controllers\Api\OrderssController@take');
+Route::middleware('auth:api')->post('/orders/take/{id?}', 'App\Http\Controllers\Api\OrdersController@take');
 
 /**
  * From Reached
  */
-Route::middleware('can:take-order')->post('/orders/fromReached/{id?}', 'App\Http\Controllers\Api\OrderssController@fromReached');
+Route::middleware('auth:api')->post('/orders/fromReached/{id?}', 'App\Http\Controllers\Api\OrdersController@fromReached');
 
 /**
  * Finished
  */
-Route::middleware('can:take-order')->post('/orders/finished/{id?}', 'App\Http\Controllers\Api\OrderssController@finished');
+Route::middleware('auth:api')->post('/orders/finished/{id?}', 'App\Http\Controllers\Api\OrdersController@finished');
 
 /**
  * Manadeep
  */
-Route::middleware('can:take-order')->post('/orders/manadeep/{id?}', 'App\Http\Controllers\Api\OrderssController@manadeep');
+Route::middleware('auth:api')->post('/orders/manadeep/{id?}', 'App\Http\Controllers\Api\OrdersController@manadeep');
