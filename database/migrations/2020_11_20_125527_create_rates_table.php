@@ -15,7 +15,6 @@ class CreateRatesTable extends Migration
     {
         Schema::create('rates', function (Blueprint $table) {
             $table->id();
-            $table->integer('order_id')->unsigned();
             $table->enum('service', [1,2,3,4,5]);
             $table->enum('response', [1,2,3,4,5]);
             $table->enum('driver', [1,2,3,4,5]);

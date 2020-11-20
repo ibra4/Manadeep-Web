@@ -19,5 +19,10 @@ class Order extends Model
         return $this->belongsTo('App\\Models\\User', 'user_id');
     }
 
+    public function rate()
+    {
+        return $this->belongsTo('App\\Models\\Rate', 'rate_id');
+    }
+
     
 }

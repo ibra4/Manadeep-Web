@@ -7,10 +7,11 @@ use Illuminate\Http\Request;
 
 class OrdersController extends BaseController
 {
+
     public function __construct()
     {
         $this->middleware('can:add-order')->only('add');
-        $this->middleware('can:take-order')->only(['take', 'fromReached', 'finished', 'manadeep']);
+        $this->middleware('can:take-order')->only('status');
         $this->middleware('can:manage-website')->only(['getAll']);
     }
 
@@ -23,15 +24,41 @@ class OrdersController extends BaseController
     public function get(Request $request)
     {
         $user_id = auth('api')->user()->id;
-        $orders = Order::where('user_id', $user_id)->with([
+        $orders = Order::select('id', 'user_id', 'driver_id', 'created_at', 'fromName', 'toName', 'status')
+            ->where('user_id', $user_id)->with([
+                'user' => function ($q) {
+                    $q->select('id', 'name');
+                },
+                'driver' => function ($q) {
+                    $q->select('id', 'name');
+                }
+            ])->get();
+        return $this->sendResponse($orders, 'success');
+    }
+
+    public function getSingle(Request $request, Order $order, $id)
+    {
+        $user = auth('api')->user();
+
+        $order = $order->newQuery()->with([
             'user' => function ($q) {
-                $q->select('id', 'name', 'phone_number');
+                $q->select('id', 'name');
             },
             'driver' => function ($q) {
-                $q->select('id', 'name', 'phone_number');
+                $q->select('id', 'name');
+            },
+            'rate'
+        ])->where('id', $id);
+
+        if (!$user->hasRole('admin')) {
+            if ($user->hasRole('user')) {
+                $order->where('user_id', $user->id);
+            } else if ($user->hasRole('driver')) {
+                $order->where('driver_id', $user->id);
             }
-        ])->get();
-        return $this->sendResponse($orders, 'success');
+        }
+
+        return $this->sendResponse($order->get()->first(), 'success');
     }
 
     public function add(Request $request)
@@ -57,6 +84,7 @@ class OrdersController extends BaseController
         $order->toName = $request->input('toName');
         $order->cost = $request->input('cost');
         $order->driver_id = null;
+        $order->rate_id = null;
         $order->user_id = auth('api')->user()->id;
         $order->status = 'in_propgress';
         $order->payer = $request->input('payer');
@@ -68,40 +96,16 @@ class OrdersController extends BaseController
         return $this->sendResponse($order, 'created successfully');
     }
 
-    public function take(Request $request, $id)
+    public function status(Request $request, $id)
     {
+        $request->validate([
+            'status' => "required|in:canceled,in_propgress,driving,from_reached,finished,manadeep"
+        ]);
         $order = Order::find($id);
         $order->driver_id = auth('api')->user()->id;
-        $order->status = 'driving';
+        $order->status = $request->input('status');
         $order->save();
 
-        $this->sendResponse($order, 'order taken');
-    }
-
-    public function fromReached(Request $request, $id)
-    {
-        $order = Order::find($id);
-        $order->status = 'from_reached';
-        $order->save();
-
-        $this->sendResponse($order, 'order reached from');
-    }
-
-    public function finished(Request $request, $id)
-    {
-        $order = Order::find($id);
-        $order->status = 'finished';
-        $order->save();
-
-        $this->sendResponse($order, 'order finished');
-    }
-
-    public function manadeep(Request $request, $id)
-    {
-        $order = Order::find($id);
-        $order->status = 'manadeep';
-        $order->save();
-
-        $this->sendResponse($order, 'order manadeep');
+        return $this->sendResponse($order, 'order taken');
     }
 }

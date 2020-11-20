@@ -21,6 +21,7 @@ class CreateOrdersTable extends Migration
             $table->string('toName');
             $table->decimal('cost');
             $table->bigInteger('driver_id')->unsigned()->nullable()->default(null);
+            $table->bigInteger('rate_id')->unsigned()->nullable()->default(null);
             $table->bigInteger('user_id')->unsigned();
             $table->enum('status', ['canceled', 'in_propgress', 'driving', 'from_reached', 'finished', 'manadeep']);
             $table->enum('payer', ['sender', 'reciever']);
@@ -30,6 +31,7 @@ class CreateOrdersTable extends Migration
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('driver_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('rate_id')->references('id')->on('rates')->onDelete('cascade');
         });
     }
 
