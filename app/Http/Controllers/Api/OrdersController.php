@@ -30,7 +30,6 @@ class OrdersController extends BaseController
             'toLng' => ['required', 'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
             'toName' => 'required',
             'cost' => 'required|numeric',
-            'status' => 'required|enum',
             'payer' => 'required',
             'comments' => 'required',
             'package' => 'required',
@@ -45,13 +44,50 @@ class OrdersController extends BaseController
         $order->cost = $request->input('cost');
         $order->driver_id = null;
         $order->user_id = auth('api')->user()->id;
-        $order->status = $request->input('status');
+        $order->status = 'in_propgress';
         $order->payer = $request->input('payer');
         $order->package = $request->input('package');
         $order->comments = $request->input('comments');
 
         $order->save();
 
-        return $this->sendResponse($order, 'success');
+        return $this->sendResponse($order, 'created successfully');
+    }
+
+    public function take(Request $request, $id)
+    {
+        $order = Order::find($id);
+        $order->driver_id = auth('api')->user()->id;
+        $order->status = 'driving';
+        $order->save();
+
+        $this->sendResponse($order, 'order taken');
+    }
+
+    public function fromReached(Request $request, $id)
+    {
+        $order = Order::find($id);
+        $order->status = 'from_reached';
+        $order->save();
+
+        $this->sendResponse($order, 'order reached from');
+    }
+    
+    public function finished(Request $request, $id)
+    {
+        $order = Order::find($id);
+        $order->status = 'finished';
+        $order->save();
+
+        $this->sendResponse($order, 'order finished');
+    }
+
+    public function manadeep(Request $request, $id)
+    {
+        $order = Order::find($id);
+        $order->status = 'manadeep';
+        $order->save();
+
+        $this->sendResponse($order, 'order manadeep');
     }
 }

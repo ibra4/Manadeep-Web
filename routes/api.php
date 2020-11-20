@@ -38,3 +38,33 @@ Route::get('/settings', 'App\Http\Controllers\Api\SettingsController@get');
  * Update Settings
  */
 Route::middleware('can:manage-website')->post('/settings/update', 'App\Http\Controllers\Api\SettingsController@update');
+
+/**
+ * Add Order
+ */
+Route::middleware('can:add-order')->post('/orders/add', 'App\Http\Controllers\Api\OrderssController@add');
+
+/**
+ * Get orders for user
+ */
+Route::middleware('auth:api')->post('/orders/get', 'App\Http\Controllers\Api\OrderssController@add');
+
+/**
+ * Take Order
+ */
+Route::middleware('can:take-order')->post('/orders/take/{id?}', 'App\Http\Controllers\Api\OrderssController@take');
+
+/**
+ * From Reached
+ */
+Route::middleware('can:take-order')->post('/orders/fromReached/{id?}', 'App\Http\Controllers\Api\OrderssController@fromReached');
+
+/**
+ * Finished
+ */
+Route::middleware('can:take-order')->post('/orders/finished/{id?}', 'App\Http\Controllers\Api\OrderssController@finished');
+
+/**
+ * Manadeep
+ */
+Route::middleware('can:take-order')->post('/orders/manadeep/{id?}', 'App\Http\Controllers\Api\OrderssController@manadeep');
