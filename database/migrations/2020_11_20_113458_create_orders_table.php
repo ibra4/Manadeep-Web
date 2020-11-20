@@ -20,7 +20,7 @@ class CreateOrdersTable extends Migration
             $table->string('to');
             $table->string('toName');
             $table->decimal('cost');
-            $table->bigInteger('driver_id')->unsigned();
+            $table->bigInteger('driver_id')->unsigned()->nullable()->default(null);
             $table->bigInteger('user_id')->unsigned();
             $table->enum('status', ['in_propgress', 'driving', 'finished', 'manadeep']);
             $table->boolean('payer');
