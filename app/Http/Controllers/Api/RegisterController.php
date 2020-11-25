@@ -22,7 +22,6 @@ class RegisterController extends BaseController
             'phone_number' => 'required|unique:users',
             'name' => 'required',
             'password' => 'required|min:8',
-            'c_password' => 'required|same:password',
         ]);
 
         if ($validator->fails()) {

@@ -19,6 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
+// @todo seperate user and driver login/register
 Route::post('register', 'App\Http\Controllers\Api\RegisterController@register');
 Route::post('login', 'App\Http\Controllers\Api\RegisterController@login');
 Route::middleware('auth:api')->post('phone/verify', 'App\Http\Controllers\Api\RegisterController@verify');
