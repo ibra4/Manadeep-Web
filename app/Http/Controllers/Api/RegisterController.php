@@ -108,6 +108,9 @@ class RegisterController extends BaseController
             'token' => $user->createToken('MyApp')->accessToken,
             'roles' => $user->roles()->get()->pluck('name')->toArray(),
             'is_active' => $user->is_active,
+            'name' => $user->name,
+            'phone' => $user->phone_number,
+            'is_active' => $user->is_active,
         ];
         if ($new) {
             $data['verification_code'] = '1234';
