@@ -36,12 +36,38 @@ class OrdersController extends BaseController
         return $this->sendResponse($orders, 'success');
     }
 
-    public function getActive(Request $request)
+    public function getByOrderPath(Request $request, $orderPath)
     {
-        $user_id = auth('api')->user()->id;
-        $orders = Order::select('id', 'user_id', 'driver_id', 'created_at', 'fromName', 'toName', 'status', 'comments', 'orderPath')
-            ->where('user_id', $user_id)
-            ->whereNotIn('status', ['canceled', 'finished', 'manadeep'])->with([
+        $order = Order::select('id', 'user_id', 'driver_id', 'created_at', 'fromName', 'toName', 'status', 'comments')
+            ->where('orderPath', 'orders/' . $orderPath)->with([
+                'user' => function ($q) {
+                    $q->select('id', 'name');
+                },
+                'driver' => function ($q) {
+                    $q->select('id', 'name');
+                }
+            ])->get()->first();
+        return $this->sendResponse($order, 'success');
+    }
+
+    public function getActiveOrder(Request $request)
+    {
+
+        $user_id_string = 'user_id';
+        $where_in = ['in_progress', 'from_reached', 'driving'];
+        $columns = ['id', 'user_id', 'driver_id', 'created_at', 'fromName', 'toName', 'status', 'comments', 'orderPath'];
+        /** @var \App\Models\User $user */
+        $user = auth('api')->user();
+
+        if ($user->hasRole('driver')) {
+            $user_id_string = 'driver_id';
+            $where_in = ['from_reached', 'driving'];
+            $columns = ['id', 'user_id', 'driver_id', 'created_at', 'fromName', 'toName', 'status', 'comments', 'orderPath', 'from', 'to', 'fromName', 'toName'];
+        }
+
+        $orders = Order::select($columns)
+            ->where($user_id_string, $user->id)
+            ->whereIn('status', $where_in)->with([
                 'user' => function ($q) {
                     $q->select('id', 'name');
                 },

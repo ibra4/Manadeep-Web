@@ -48,12 +48,17 @@ Route::middleware('auth:api')->get('/orders/all', 'App\Http\Controllers\Api\Orde
 /**
  * Get active order for user
  */
-Route::middleware('auth:api')->get('/orders/active', 'App\Http\Controllers\Api\OrdersController@getActive');
+Route::middleware('auth:api')->get('/orders/active', 'App\Http\Controllers\Api\OrdersController@getActiveOrder');
 
 /**
  * Get Single order
  */
 Route::middleware('auth:api')->get('/orders/{id}', 'App\Http\Controllers\Api\OrdersController@getSingle');
+
+/**
+ * Get Single order
+ */
+Route::middleware('auth:api')->get('/orders/path/{orderPath}', 'App\Http\Controllers\Api\OrdersController@getByOrderPath');
 
 /**
  * Get orders for user
@@ -69,7 +74,7 @@ Route::middleware('auth:api')->post('/orders/add', 'App\Http\Controllers\Api\Ord
 /**
  * Update order status
  */
-Route::middleware('auth:api')->post('/orders/status/{id?}', 'App\Http\Controllers\Api\OrdersController@status');
+Route::middleware('auth:api')->post('/orders/status/{id}', 'App\Http\Controllers\Api\OrdersController@status');
 
 /**
  * Rate the order
