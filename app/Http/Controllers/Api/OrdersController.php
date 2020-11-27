@@ -74,6 +74,7 @@ class OrdersController extends BaseController
             'payer' => 'required',
             'comments' => 'required',
             'package' => 'required',
+            'orderPath' => 'required'
         ]);
 
         $order = new Order();
@@ -83,6 +84,7 @@ class OrdersController extends BaseController
         $order->fromName = $request->input('fromName');
         $order->toName = $request->input('toName');
         $order->cost = $request->input('cost');
+        $order->orderPath = $request->input('orderPath');
         $order->driver_id = null;
         $order->rate_id = null;
         $order->user_id = auth('api')->user()->id;
