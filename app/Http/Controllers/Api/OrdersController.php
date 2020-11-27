@@ -24,7 +24,7 @@ class OrdersController extends BaseController
     public function get(Request $request)
     {
         $user_id = auth('api')->user()->id;
-        $orders = Order::select('id', 'user_id', 'driver_id', 'created_at', 'fromName', 'toName', 'status')
+        $orders = Order::select('id', 'user_id', 'driver_id', 'created_at', 'fromName', 'toName', 'status', 'comments')
             ->where('user_id', $user_id)->with([
                 'user' => function ($q) {
                     $q->select('id', 'name');
@@ -33,6 +33,22 @@ class OrdersController extends BaseController
                     $q->select('id', 'name');
                 }
             ])->get();
+        return $this->sendResponse($orders, 'success');
+    }
+
+    public function getActive(Request $request)
+    {
+        $user_id = auth('api')->user()->id;
+        $orders = Order::select('id', 'user_id', 'driver_id', 'created_at', 'fromName', 'toName', 'status', 'comments', 'orderPath')
+            ->where('user_id', $user_id)
+            ->whereNotIn('status', ['canceled', 'finished', 'manadeep'])->with([
+                'user' => function ($q) {
+                    $q->select('id', 'name');
+                },
+                'driver' => function ($q) {
+                    $q->select('id', 'name');
+                }
+            ])->get()->first();
         return $this->sendResponse($orders, 'success');
     }
 
@@ -88,7 +104,7 @@ class OrdersController extends BaseController
         $order->driver_id = null;
         $order->rate_id = null;
         $order->user_id = auth('api')->user()->id;
-        $order->status = 'in_propgress';
+        $order->status = 'in_progress';
         $order->payer = $request->input('payer');
         $order->package = $request->input('package');
         $order->comments = $request->input('comments');

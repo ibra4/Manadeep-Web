@@ -46,14 +46,20 @@ Route::middleware('can:manage-website')->post('/settings/update', 'App\Http\Cont
 Route::middleware('auth:api')->get('/orders/all', 'App\Http\Controllers\Api\OrdersController@getAll');
 
 /**
+ * Get active order for user
+ */
+Route::middleware('auth:api')->get('/orders/active', 'App\Http\Controllers\Api\OrdersController@getActive');
+
+/**
  * Get Single order
  */
-Route::middleware('auth:api')->get('/orders/{id?}', 'App\Http\Controllers\Api\OrdersController@getSingle');
+Route::middleware('auth:api')->get('/orders/{id}', 'App\Http\Controllers\Api\OrdersController@getSingle');
 
 /**
  * Get orders for user
  */
 Route::middleware('auth:api')->get('/orders', 'App\Http\Controllers\Api\OrdersController@get');
+
 
 /**
  * Add Order
