@@ -84,7 +84,7 @@ class OrdersController extends BaseController
 
         $order = $order->newQuery()->with([
             'user' => function ($q) {
-                $q->select('id', 'name');
+                $q->select('id', 'name', 'phone_number');
             },
             'driver' => function ($q) {
                 $q->select('id', 'name');

@@ -80,3 +80,18 @@ Route::middleware('auth:api')->post('/orders/status/{id}', 'App\Http\Controllers
  * Rate the order
  */
 Route::middleware('auth:api')->post('/rate/{id?}', 'App\Http\Controllers\Api\RatesController@add');
+
+/**
+ * Get current user profile
+ */
+Route::middleware('auth:api')->get('/profile', 'App\Http\Controllers\Api\ProfileController@get');
+
+/**
+ * Update 
+ */
+Route::middleware('auth:api')->post('/profile/update', 'App\Http\Controllers\Api\ProfileController@update');
+
+/**
+ * Update 
+ */
+Route::middleware('auth:api')->post('/profile/image', 'App\Http\Controllers\Api\ProfileController@uploadImage');
