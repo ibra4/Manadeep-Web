@@ -23,9 +23,15 @@ class OrdersController extends BaseController
 
     public function get(Request $request)
     {
-        $user_id = auth('api')->user()->id;
+        $user = auth('api')->user();
+
+        $user_id_string = "user_id";
+
+        if ($user->hasRole('driver')) {
+            $user_id_string = "driver_id";
+        }
         $orders = Order::select('id', 'user_id', 'driver_id', 'created_at', 'fromName', 'toName', 'status', 'comments')
-            ->where('user_id', $user_id)->with([
+            ->where($user_id_string, $user->id)->with([
                 'user' => function ($q) {
                     $q->select('id', 'name');
                 },
@@ -106,8 +112,8 @@ class OrdersController extends BaseController
     public function add(Request $request)
     {
         $request->validate([
-            'fromLat' => ['required', 'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
-            'fromLng' => ['required', 'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
+            'fromLat' => ['regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
+            'fromLng' => ['regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
             'fromName' => 'required',
             'toLat' => ['required', 'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
             'toLng' => ['required', 'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
@@ -116,7 +122,9 @@ class OrdersController extends BaseController
             'payer' => 'required',
             'comments' => 'required',
             'package' => 'required',
-            'orderPath' => 'required'
+            'orderPath' => 'required',
+            'recieverName' => 'required',
+            'recieverPhone' => 'required',
         ]);
 
         $order = new Order();
@@ -129,11 +137,14 @@ class OrdersController extends BaseController
         $order->orderPath = $request->input('orderPath');
         $order->driver_id = null;
         $order->rate_id = null;
+        $order->city = $request->has('city') ? $request->input('city') : null;
         $order->user_id = auth('api')->user()->id;
         $order->status = 'in_progress';
         $order->payer = $request->input('payer');
         $order->package = $request->input('package');
         $order->comments = $request->input('comments');
+        $order->recieverName = $request->input('recieverName');
+        $order->recieverPhone = $request->input('recieverPhone');
 
         $order->save();
 

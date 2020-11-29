@@ -4,13 +4,18 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\BaseController;
+use App\Models\City;
 
 class SettingsController extends BaseController
 {
     public function get(Request $request)
     {
         $settings = json_decode(file_get_contents((storage_path('settings.json')), true));
-        return $this->sendResponse($settings, 'success');
+        $data = [
+            'settings' => $settings,
+            'cities' => City::all()
+        ];
+        return $this->sendResponse($data, 'success');
     }
 
     public function update(Request $request)

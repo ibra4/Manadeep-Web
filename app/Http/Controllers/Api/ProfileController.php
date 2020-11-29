@@ -15,7 +15,9 @@ class ProfileController extends BaseController
             'nationality' => 'required',
             'qtr_id_no' => 'required',
             'image' => 'required',
-            'locationName' => 'required'
+            'locationName' => 'required',
+            'name' => 'required',
+            'email' => 'email',
         ]);
 
         $user_id = auth('api')->user()->id;
@@ -25,6 +27,9 @@ class ProfileController extends BaseController
             $user->location = $request->input('lat') . ',' . $request->input('lng');
             $user->nationality = $request->input('nationality');
             $user->qtr_id_no = $request->input('qtr_id_no');
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->phone_number = $request->input('phone_number');
             $user->image = $request->input('image');
             $user->locationName = $request->input('locationName');
 
