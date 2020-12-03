@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\BaseController;
 use App\Models\City;
+use App\Models\Pricing;
 
 class SettingsController extends BaseController
 {
@@ -13,7 +14,8 @@ class SettingsController extends BaseController
         $settings = json_decode(file_get_contents((storage_path('settings.json')), true));
         $data = [
             'settings' => $settings,
-            'cities' => City::all()
+            'cities' => City::all(),
+            'pricings' => Pricing::all()
         ];
         return $this->sendResponse($data, 'success');
     }

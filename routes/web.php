@@ -25,3 +25,6 @@ Route::name('settings.index')->middleware('can:manage-website')->get('/settings'
 Route::name('settings.update')->middleware('can:manage-website')->post('/settings', [App\Http\Controllers\SettingsController::class, 'update']);
 
 Route::middleware('can:manage-website')->resource('cities', App\Http\Controllers\CitiesController::class)->except(['show']);
+
+// Pricing
+Route::middleware('can:manage-website')->resource('cities-pricing', App\Http\Controllers\PricingController::class);

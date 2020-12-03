@@ -56,4 +56,9 @@ class CitiesController extends Controller
         $city->delete();
         return redirect()->route('cities.index');
     }
+
+    public function citiesPricing(Request $request)
+    {
+        dd("hi");
+    }
 }
