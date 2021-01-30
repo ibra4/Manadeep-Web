@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Api\BaseController;
 use App\Models\City;
 use App\Models\Pricing;
+use App\Models\packag;
+use App\Models\SubPackage;
 
 class SettingsController extends BaseController
 {
@@ -15,7 +17,9 @@ class SettingsController extends BaseController
         $data = [
             'settings' => $settings,
             'cities' => City::all(),
-            'pricings' => Pricing::all()
+            'packages' => packag::all(),
+            'sub_package' => SubPackage::all(),
+            'pricings' => Pricing::all(),
         ];
         return $this->sendResponse($data, 'success');
     }

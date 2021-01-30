@@ -3,35 +3,34 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use App\Models\gallery;
 use Illuminate\Http\Request;
 
 class ProfileController extends BaseController
 {
     public function update(Request $request)
     {
-        $request->validate([
-            'lat' => ['required', 'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
-            'lng' => ['required', 'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
-            'nationality' => 'required',
-            'qtr_id_no' => 'required',
-            'image' => 'required',
-            'locationName' => 'required',
-            'name' => 'required',
-            'email' => 'email',
-        ]);
-
         $user_id = auth('api')->user()->id;
 
         $user = User::find($user_id);
 
-            $user->location = $request->input('lat') . ',' . $request->input('lng');
+//             $user->location = $request->input('lat') . ',' . $request->input('lng');
             $user->nationality = $request->input('nationality');
             $user->qtr_id_no = $request->input('qtr_id_no');
             $user->name = $request->input('name');
             $user->email = $request->input('email');
             $user->phone_number = $request->input('phone_number');
             $user->image = $request->input('image');
-            $user->locationName = $request->input('locationName');
+            
+            if($request->has('user')){
+                $user->name = $request->input('name');
+                $user->email = $request->input('email');
+                $user->phone_number = $request->input('phone_number');
+                $user->image = $request->input('image');
+                
+            }    
+            
+//             $user->locationName = $request->input('locationName');
 
         $user->save();
 
@@ -52,8 +51,20 @@ class ProfileController extends BaseController
         $image_type = $image_type_aux[1];
         $image_base64 = base64_decode($image_parts[1]);
         $uniqid = uniqid();
-        $file = public_path() . '/files/' . $uniqid . '.' . $image_type;
+        $file_path='/files/' . $uniqid . '.' . $image_type;
+        $file = public_path() .$file_path;
         file_put_contents($file, $image_base64);
-        return $this->sendResponse('files/' . $uniqid . '.' . $image_type, 'uploaded successfully');
+        
+        
+        
+        $gallery = new gallery();
+        
+        $gallery->user_id = auth('api')->user()->id;
+        $gallery->filepath = $file_path;
+        
+        $gallery->save();
+        
+        
+        return $this->sendResponse($gallery, 'uploaded successfully');
     }
 }

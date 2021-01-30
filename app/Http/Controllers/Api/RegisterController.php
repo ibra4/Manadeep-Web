@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Validator;
+use App\Models\Notification;
 
 class RegisterController extends BaseController
 {
@@ -67,7 +68,7 @@ class RegisterController extends BaseController
             $user = Auth::user();
 
             $success = $this->getUserResponse($user);
-
+            
             return $this->sendResponse($success, 'User login successfully.');
         } else {
             return $this->sendError('Unauthorised.', ['error' => 'Unauthorised']);
@@ -103,6 +104,10 @@ class RegisterController extends BaseController
 
     private function getUserResponse(User $user, $new = false)
     {
+        $notification = Notification::where('user_id',$user->id)
+        ->where('status','active')
+        ->count();
+        
         $data = [
             'token' => $user->createToken('MyApp')->accessToken,
             'roles' => $user->roles()->get()->pluck('name')->toArray(),
@@ -110,6 +115,8 @@ class RegisterController extends BaseController
             'name' => $user->name,
             'phone' => $user->phone_number,
             'is_active' => $user->is_active,
+            'id'=>$user->id,
+            'Notification'=> $notification
         ];
         if ($new) {
             $data['verification_code'] = '1234';
