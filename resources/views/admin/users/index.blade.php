@@ -3,6 +3,13 @@
 @section('content')
     <div class="container">
         <h1 class="title py-5">{{ __('Users Manager') }}</h1>
+
+
+        @if(Session::has('message'))
+
+<p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
+<br><br>
+@endif
         <table id='myTable' class="table table-striped">
             <thead>
                 <tr>
@@ -21,19 +28,19 @@
                             <td>{{ $user->phone_number }}</td>
                             <td>
                                 <div class="d-flex justify-content-start" style="justify-content: space-evenly !important;">
-                                    <a href="{{ route('admin.users.orders/$user->id', [app()->getLocale()]) }}"
-                                        class="btn btn-warning">{{ __('Orders') }}
+                                    <a href="{{ route('admin.users.orders' , $user->id, [app()->getLocale()]) }}"
+                                        class="btn btn-warning">{{ __('Orders History') }}
                                     </a>
-                                    <a href="{{ route('admin.users.edit', [app()->getLocale(), $user->id]) }}"
-                                        class="btn btn-primary">{{ __('Rates') }}
+                                    <a href="{{ route('admin.users.rates', $user->id , [app()->getLocale()]) }}"
+                                        class="btn btn-primary">{{ __('User Reviews') }}
                                     </a>
-                                    <a href="{{ route('admin.users.edit', [app()->getLocale(), $user->id]) }}"
-                                        class="btn btn-success">{{ __('Edit') }}
+                                    <a href="{{ route('admin.users.edit', $user->id, [app()->getLocale()]) }}"
+                                        class="btn btn-success">{{ __('Modify User') }}
                                     </a>
-                                    <form action="{{ route('admin.users.destroy', [app()->getLocale(), $user]) }}"
+                                    <form action="{{ route('admin.users.delete' ,  $user->id ,  [app()->getLocale()]) }}"
                                         method="POST" class="mx-2">
                                         @method("DELETE")
-                                        <button type="submit" class="btn btn-danger">{{ __('Delete') }}</button>
+                                        <button type="submit" onclick="return confirm('{{ __('Are you sure you want to delete this user?') }}'); " class="btn btn-danger">{{ __('Delete') }}</button>
                                         @csrf
                                     </form>
                                 </div>
