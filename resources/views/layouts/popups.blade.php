@@ -12,7 +12,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon.png') }}">
 
-    <title>Manadeep - {{__('Admin Dashboard')}}</title>
+   
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -40,11 +40,10 @@
 
 <body>
     <div id="admin-dashboard">
-        @include('admin.components.header')
-
+      
 
         <main>
-            @include('admin.components.sidemenu')
+          
             @yield('content')
         </main>
     </div>
@@ -55,9 +54,7 @@
    <script src="{{ asset('js/chart.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
     <script>
-    $(document).ready( function () {
-        $('#myTable').DataTable();
-    } );
+   
     </script>
 
     

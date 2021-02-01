@@ -27,20 +27,7 @@ $currentUrl = str_replace($selected, $target, url()->current());
 <!--                         href="">{{ __('Contact Us') }}</a> -->
 <!--                 </li> -->
 <!--             </ul> -->
-            <ul class="navbar-nav ml-auto">                
-                @if (app()->getLocale() == 'en')
-                    <div class="row navbar-buttons">
-                        <a class="btn btn-secondary d-sm-none d-none d-md-block language-button" href="{{ $currentUrl }}">
-                            <span>ع</span>
-                        </a>
-                        <button type="button"
-                            class="btn btn-b-n d-sm-none navbar-toggle-box-collapse d-none d-md-block mx-2"
-                            data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-expanded="false">
-                            <span class="fa fa-search" aria-hidden="true"></span>
-                        </button>
-                    </div>
-                @endif
-            </ul>
+
         </div>
     </div>
 </nav><!-- End Header/Navbar -->

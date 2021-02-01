@@ -11,10 +11,10 @@
             class="fa fa-2x fa-user w-100px text-center"></i><span>{{ __('Manage Users') }}</span></a>
      <a class="py-4" href="{{ route('admin.drivers', [app()->getLocale()]) }}"><i
             class="fa fa-2x fa-id-card w-100px text-center"></i><span>{{ __('Manage Drivers') }}</span></a>
-    <a class="py-4" href=""><i
-            class="fa fa-2x fa-dollar w-100px text-center"></i><span>{{ __('Drivers accounting') }}</span></a>
-    <a class="py-4" href=""><i
-    class="fa fa-2x fa-list-ul w-100px text-center"></i><span>{{ __('Manage Orders') }}</span></a>
-    <a class="py-4" href=""><i
-            class="fa fa-product-hunt w-100px text-center"></i><span>{{ __('Manage_Product') }}</span></a>
+    <a class="py-4" href="{{route('admin.partners')}}"><i
+            class="fa fa-2x fa-user w-100px text-center"></i><span>{{ __('Manage Partnerships') }}</span></a>
+    <a class="py-4" href="{{route('admin.banners')}}"><i
+    class="fa fa-2x fa-list-ul w-100px text-center"></i><span>{{ __('Manage Banners') }}</span></a>
+    <a class="py-4" href="{{route('admin.locations')}}"><i
+            class="fa fa-location-arrow w-100px text-center"></i><span>{{ __('Manage Locations') }}</span></a>
    </div>
