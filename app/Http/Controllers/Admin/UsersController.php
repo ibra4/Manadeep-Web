@@ -9,7 +9,8 @@ use App\Models\Role;
 use App\Models\Rate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Order;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 class UsersController extends Controller
 {
@@ -43,6 +44,20 @@ class UsersController extends Controller
             'roles' => $roles,
             'user_roles' => $user_roles
         ]);
+    }
+    
+    public function approval($id)
+    {
+        $user = User::find($id);
+        $user->active = '1';
+        
+        $Email=$this->sendEmail($user->email);
+            
+        $user->save();
+            \Session::flash('message', $user->name . ' Has been Actived');
+            \Session::flash('class', 'alert-success');
+        
+        return redirect()->route('admin.users', app()->getLocale());
     }
 
     /**
@@ -94,30 +109,43 @@ class UsersController extends Controller
         return redirect()->route('admin.users', app()->getLocale());
     }
 
-    public function rates($id)
+    public function Advertise($id)
     {
-        $rates = \DB::select("select * from orders join rates on orders.rate_id = rates.id where orders.user_id = '{$id}' ");
-        $user = User::find($id);
 
-        return view('admin.users.rates')->with([
-            'user' => $user,
-            'rates' => $rates
-        ]);
     }
 
-    public function orders($id)
+    public function Approve(Request $request)
     {
-        $user = User::find($id);
-        $orders = \DB::select("select * , ( select name as driver_name from users where id = orders.driver_id ) as driver_name from orders where orders.user_id = '{$id}' ");
-
-        return view('admin.users.orders')->with([
-            'user' => $user,
-            'orders' => $orders
-        ]);
+        
+        return $request->user();
     }
-
-    // public function AuthRouteAPI(Request $request)
-    // {
-    // return $request->user();
-    // }
+    
+    private function sendEmail($to) {
+        
+        $mail = new PHPMailer ;
+        
+        $mail->IsSMTP();
+        $mail->Mailer = "smtp";
+        $mail->SMTPDebug  = 1;
+        $mail->SMTPAuth   = TRUE;
+        $mail->SMTPSecure = "tls";
+        $mail->Port       = 587;
+        $mail->Host       = "smtp.gmail.com";
+        $mail->Username   = "app.koha3@gmail.com";
+        $mail->Password   = "koha@123";
+        
+        $mail->IsHTML(true);
+        $mail->AddAddress($to);
+        $mail->SetFrom("app.koha3@gmail.com", "Koha");
+        $mail->Subject = "your account on Koha app";
+        $mail->Body  = "The admin approved your account for Koha app , you can login now ";
+        
+        if(!$mail->Send()) {
+            return json_encode(['status' => "ERROR", 'msg' => "Error while sending Email."]);
+        } else {
+            return json_encode(['status' => "success", 'msg' => "Email sent successfully"]);
+        }
+        
+        
+    }
 }

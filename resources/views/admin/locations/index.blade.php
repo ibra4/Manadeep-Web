@@ -11,7 +11,6 @@
 <br><br>
 @endif
 
-<a class="btn btn-warning pull-left" href="{{route('admin.locations.pricing',  [app()->getLocale()]) }}"><i class="fa fa-list"></i> Manage Location Pricing</a>
 <a class="btn btn-primary pull-right" href="{{route('admin.locations.create',  [app()->getLocale()]) }}"><i class="fa fa-plus"></i> Add New Location</a> <br><br>
 
         <table id='myTable' class="table table-striped">
@@ -20,8 +19,6 @@
 
                     <th scope="col">{{ __('Arabic Name') }}</th>
                     <th scope="col">{{ __('English Name') }}</th>
-                    <th scope="col">{{ __('Longitude') }}</th>
-                    <th scope="col">{{ __('Latitude') }}</th>
                     <th scope="col">{{ __('Actions') }}</th>
                 </tr>
             </thead>
@@ -32,8 +29,6 @@
 
                             <td>{{ $location->name_ar }}</td>
                             <td>{{ $location->name_en }}</td>
-                            <td>{{ $location->lng }}</td>
-                            <td>{{ $location->lat }}</td>
                             <td>
                                 <div class="d-flex justify-content-start" style="justify-content: space-evenly !important;">
 

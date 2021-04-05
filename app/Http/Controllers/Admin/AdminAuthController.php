@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
+use App\Models\Contact;
+use App\Models\AdminMessage;
 class AdminAuthController extends Controller
 {
     public function adminLoginPage(Request $request)
@@ -23,7 +25,7 @@ class AdminAuthController extends Controller
             'password' => 'required',
         ]);
 
-        $user = User::where('phone_number', $request->username)->get()->first();
+        $user = User::where('phone', $request->username)->get()->first();
 
 //         return $user;
 
@@ -40,5 +42,26 @@ class AdminAuthController extends Controller
         }
         $request->session()->flash('error', __('Invalid username or password'));
         return redirect()->route('admin_login', app()->getLocale());
+    }
+    
+    public function ShowMessages()
+    {
+        $AdminMessage=AdminMessage::all();
+        $AllMessages= array();
+        
+        
+        foreach ($AdminMessage as $key){
+            $user = User::find($key->user_id);
+            $key->user_id=$user->name;
+            $AllMessages[] =$key;
+        }
+        
+        return view('admin.message')->with('messages', $AllMessages);
+    }
+    
+    public function ShowContact()
+    {
+        $Contact=Contact::all();
+        return view('admin.contact')->with('Contact', $Contact);
     }
 }

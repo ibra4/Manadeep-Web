@@ -16,6 +16,7 @@
                     <th scope="col">#{{ __('ID') }}</th>
                     <th scope="col">{{ __('Name') }}</th>
                     <th scope="col">{{ __('Phone Number') }}</th>
+                    <th scope="col">{{ __('approve') }}</th>
                     <th scope="col">{{ __('Actions') }}</th>
                 </tr>
             </thead>
@@ -25,16 +26,22 @@
                         <tr>
                             <th scope="row">{{ $user->id }}</th>
                             <td>{{ $user->name }}</td>
-                            <td>{{ $user->phone_number }}</td>
+                            <td>{{ $user->phone }}</td>
+                            <td>
+                                    @if($user->active != '1')
+                                    <a href="{{ route('admin.users.active', $user->id, [app()->getLocale()]) }}"
+                                        class="btn btn-success">{{ __('Approve User') }}
+                                    </a>
+                                    @endif
+                                    @if($user->active == '1')
+                                    <p
+                                        class="">{{ __('Active') }}
+                                    </p>
+                                    @endif
+							</td>
                             <td>
                                 <div class="d-flex justify-content-start" style="justify-content: space-evenly !important;">
-                                    <a href="{{ route('admin.users.orders' , $user->id, [app()->getLocale()]) }}"
-                                        class="btn btn-warning">{{ __('Orders History') }}
-                                    </a>
-                                    <a href="{{ route('admin.users.rates', $user->id , [app()->getLocale()]) }}"
-                                        class="btn btn-primary">{{ __('User Reviews') }}
-                                    </a>
-                                    <a href="{{ route('admin.users.edit', $user->id, [app()->getLocale()]) }}"
+                                     <a href="{{ route('admin.users.edit', $user->id, [app()->getLocale()]) }}"
                                         class="btn btn-success">{{ __('Modify User') }}
                                     </a>
                                     <form action="{{ route('admin.users.delete' ,  $user->id ,  [app()->getLocale()]) }}"

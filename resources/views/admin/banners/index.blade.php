@@ -18,6 +18,7 @@
                     
                     <th scope="col">{{ __('Name') }}</th>
                     <th scope="col">{{ __('Image') }}</th>
+                    <th scope="col">{{ __('Description') }}</th>
                     <th scope="col">{{ __('Actions') }}</th>
                 </tr>
             </thead>
@@ -26,7 +27,8 @@
                         <tr>
                            
                             <td>{{ $banner->name }}</td>
-                            <td><img src="{{ $banner->image }}" style="max-width: 500px; max-height:130px;" ></td>
+                            <td><img src="{{ $banner->image }}" style="width: 200px; height:130px;" ></td>
+                            <td>{{ $banner->Description }}</td>
                             <td>
                                 <div class="d-flex justify-content-start" style="justify-content: space-evenly !important;">
                                     <a href="{{ route('admin.banners.edit' , $banner->id, [app()->getLocale()]) }}"

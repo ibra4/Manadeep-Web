@@ -4,7 +4,7 @@
 
     <div class="container">
         <h1 class="title py-5">{{ __('Editing Banner') }} {{$banner->name}}</h1>
-        
+
               @if(Session::has('message'))
 <br>
 <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
@@ -15,26 +15,34 @@
 
             <div class="form-group">
                 <label for="name">{{ __('Name') }}</label>
-
                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
                     value="{{$banner->name}}" required autofocus>
-
                 @error('name')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
             </div>
-            
-            
+            <div class="form-group">
+                <label for="Description">{{ __('Description') }}</label>
+                <input id="Description" type="text" class="form-control @error('Description') is-invalid @enderror" name="name"
+                value="{{$banner->Description}}" required autofocus>
+                @error('Description')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
+
+
             <div class="form-group">
                 <label >{{ __('Current Image') }}</label><br>
-				<image src="{{$banner->image}}" style="max-width:350px; max-height:200px;" >
-                
+				<image src="{{str_replace('/var/www/html','',$banner->image)}}" style="max-width:350px; max-height:200px;" >
+
             </div>
-            
-            
-            
+
+
+
              <div class="form-group">
                 <label for="image">{{ __('Replace Image') }}</label>
 
@@ -47,14 +55,14 @@
                     </span>
                 @enderror
             </div>
-            
-
-          
 
 
-           
-    
-  
+
+
+
+
+
+
     <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
 
 	@csrf

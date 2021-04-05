@@ -2,11 +2,15 @@
 use App\User;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\UsersController;
-use App\Http\Controllers\Admin\DriversController;
+use App\Http\Controllers\Admin\BidWebController;
 use App\Http\Controllers\Admin\PartnersController;
 use App\Http\Controllers\Admin\BannersController;
 use App\Http\Controllers\Admin\LocationsController;
+use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\OrdersController;
+use App\Http\Controllers\Admin\AdvertiseController;
+use App\Http\Controllers\Admin\AccessoriesController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\Request;
@@ -44,6 +48,15 @@ Auth::routes();
 Route::name('admin')->middleware('can:manage-website')->get('/admin', function () {
          return view('admin.index');
      });
+    Route::name('privacy')->get('/privacy', function () {
+        return view('privacy');
+    });
+
+        Route::name('support')->get('/support', function () {
+            return view('support');
+        });
+
+
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -51,29 +64,30 @@ Route::name('admin')->middleware('can:manage-website')->get('/admin', function (
 Route::get('/admin/login', [AdminAuthController::class, 'adminLoginPage'])->name('admin_login');
 Route::post('/admin/login', [AdminAuthController::class, 'adminLogin'])->name('admin_login');
 
+Route::get('/admin/messages', [AdminAuthController::class, 'ShowMessages'])->name('admin.messages');
+Route::get('/admin/contact', [AdminAuthController::class, 'ShowContact'])->name('admin.contact');
+
+// ========================  users  =============================
 
 
 Route::get('/admin/users', [UsersController::class, 'index'])->middleware('can:manage-website')->name('admin.users');
 Route::get('/admin/users/edit/{id}', [UsersController::class, 'edit'])->middleware('can:manage-website')->name('admin.users.edit');
+Route::get('/admin/users/active/{id}', [UsersController::class, 'approval'])->middleware('can:manage-website')->name('admin.users.active');
 Route::delete('/admin/users/destroy/{id}', [UsersController::class, 'destroy'])->middleware('can:manage-website')->name('admin.users.delete');
 Route::post('/admin/users/update/{id}', [UsersController::class, 'update'])->middleware('can:manage-website')->name('admin.users.update');
-Route::get('/admin/users/rates/{id}', [UsersController::class, 'rates'])->middleware('can:manage-website')->name('admin.users.rates');
-Route::get('/admin/users/orders/{id}', [UsersController::class, 'orders'])->middleware('can:manage-website')->name('admin.users.orders');
+Route::get('/admin/users/approve/', [UsersController::class, 'Approve'])->middleware('can:manage-website')->name('admin.users.approve');
 
+// ========================  Bids  =============================
 
-Route::put('/admin/drivers/updatepercentage', [DriversController::class, 'updatepercentage'])->middleware('can:manage-website')->name('admin.drivers.updatepercentage');
-Route::put('/admin/drivers/updatecomm', [DriversController::class, 'updatecomm'])->middleware('can:manage-website')->name('admin.drivers.updatecomm');
+Route::get('/admin/bids', [BidWebController::class, 'index'])->middleware('can:manage-website')->name('admin.bids');
+Route::get('/admin/bids/edit/{id}', [BidWebController::class, 'edit'])->middleware('can:manage-website')->name('admin.bids.edit');
+Route::delete('/admin/bids/destroy/{id}', [BidWebController::class, 'destroy'])->middleware('can:manage-website')->name('admin.bids.destroy');
+Route::post('/admin/bids/update/{id}', [BidWebController::class, 'update'])->middleware('can:manage-website')->name('admin.bids.update');
+Route::get('/admin/bids/show/{id}', [BidWebController::class, 'show'])->middleware('can:manage-website')->name('admin.bids.show');
+Route::get('/admin/bids/add', [BidWebController::class, 'AddPage'])->middleware('can:manage-website')->name('admin.bids.add');
+Route::post('/admin/bids/create', [BidWebController::class, 'create'])->middleware('can:manage-website')->name('admin.bids.create');
 
-Route::get('/admin/drivers/orders/{id}', [DriversController::class, 'orders'])->middleware('can:manage-website')->name('admin.drivers.orders');
-Route::get('/admin/drivers', [DriversController::class, 'index'])->middleware('can:manage-website')->name('admin.drivers');
-Route::get('/admin/drivers/create', [DriversController::class, 'create'])->middleware('can:manage-website')->name('admin.drivers.create');
-Route::post('/admin/drivers/create', [DriversController::class, 'create'])->middleware('can:manage-website')->name('admin.drivers.create');
-Route::get('/admin/drivers/{id}', [DriversController::class, 'edit'])->middleware('can:manage-website')->name('admin.drivers.edit');
-Route::post('/admin/drivers/{id}', [DriversController::class, 'edit'])->middleware('can:manage-website')->name('admin.drivers.edit');
-Route::delete('/admin/drivers/{id}', [DriversController::class, 'delete'])->middleware('can:manage-website')->name('admin.drivers.delete');
-Route::put('/admin/drivers/{id}', [DriversController::class, 'block'])->middleware('can:manage-website')->name('admin.drivers.block');
-
-
+// ========================  type  =============================
 
 Route::get('/admin/partners', [PartnersController::class, 'index'])->middleware('can:manage-website')->name('admin.partners');
 Route::get('/admin/partners/edit/{id}', [PartnersController::class, 'edit'])->middleware('can:manage-website')->name('admin.partners.edit');
@@ -87,15 +101,40 @@ Route::post('/admin/partners/managecategories/create', [PartnersController::clas
 Route::post('/admin/partners/managecategories/modify', [PartnersController::class, 'managecategoriesmodify'])->middleware('can:manage-website')->name('admin.partners.modify_category');
 Route::get('/admin/partners/managecategories/delete/{id}', [PartnersController::class, 'managecategoriesdelete'])->middleware('can:manage-website')->name('admin.partners.delete_category');
 
+// ========================  banners  =============================
 
 Route::get('/admin/banners', [BannersController::class, 'index'])->middleware('can:manage-website')->name('admin.banners');
-Route::get('/admin/create', [BannersController::class, 'create'])->middleware('can:manage-website')->name('admin.banners.create');
-Route::post('/admin/create', [BannersController::class, 'create'])->middleware('can:manage-website')->name('admin.banners.create');
+Route::get('/admin/banners/create', [BannersController::class, 'create'])->middleware('can:manage-website')->name('admin.banners.create');
+Route::post('/admin/banners/create', [BannersController::class, 'create'])->middleware('can:manage-website')->name('admin.banners.create');
 Route::get('/admin/banners/edit/{id}', [BannersController::class, 'edit'])->middleware('can:manage-website')->name('admin.banners.edit');
 Route::post('/admin/banners/edit/{id}', [BannersController::class, 'edit'])->middleware('can:manage-website')->name('admin.banners.edit');
 Route::delete('/admin/banners/delete/{id}', [BannersController::class, 'delete'])->middleware('can:manage-website')->name('admin.banners.delete');
 
+// ========================  Advertises  =============================
 
+Route::get('/admin/advertises', [AdvertiseController::class, 'index'])->middleware('can:manage-website')->name('admin.advertises');
+Route::delete('/admin/advertises/destroy/{id}', [AdvertiseController::class, 'destroy'])->middleware('can:manage-website')->name('admin.advertises.destroy');
+Route::get('/admin/advertises/show/{id}', [AdvertiseController::class, 'show'])->middleware('can:manage-website')->name('admin.advertises.show');
+Route::get('/admin/advertises/approve/{id}', [AdvertiseController::class, 'approve'])->middleware('can:manage-website')->name('admin.advertises.approve');
+
+// ========================  Accessories  =============================
+
+Route::get('/admin/accessories', [AccessoriesController::class, 'index'])->middleware('can:manage-website')->name('admin.accessories');
+Route::get('/admin/accessories/edit/{id}', [AccessoriesController::class, 'edit'])->middleware('can:manage-website')->name('admin.accessories.edit');
+Route::delete('/admin/accessories/destroy/{id}', [AccessoriesController::class, 'destroy'])->middleware('can:manage-website')->name('admin.accessories.destroy');
+Route::post('/admin/accessories/update/{id}', [AccessoriesController::class, 'update'])->middleware('can:manage-website')->name('admin.accessories.update');
+Route::get('/admin/accessories/show/{id}', [AccessoriesController::class, 'show'])->middleware('can:manage-website')->name('admin.accessories.show');
+Route::get('/admin/accessories/add', [AccessoriesController::class, 'AddPage'])->middleware('can:manage-website')->name('admin.accessories.add');
+Route::post('/admin/accessories/create', [AccessoriesController::class, 'create'])->middleware('can:manage-website')->name('admin.accessories.create');
+
+// ========================  News  =============================
+
+Route::get('/admin/news', [NewsController::class, 'index'])->middleware('can:manage-website')->name('admin.news');
+Route::delete('/admin/news/destroy/{id}', [NewsController::class, 'destroy'])->middleware('can:manage-website')->name('admin.news.destroy');
+Route::get('/admin/news/add', [NewsController::class, 'AddPage'])->middleware('can:manage-website')->name('admin.news.add');
+Route::post('/admin/news/create', [NewsController::class, 'create'])->middleware('can:manage-website')->name('admin.news.create');
+
+// ========================  Locations  =============================
 
 Route::get('/admin/locations', [LocationsController::class, 'index'])->middleware('can:manage-website')->name('admin.locations');
 Route::get('/admin/locations/create', [LocationsController::class, 'create'])->middleware('can:manage-website')->name('admin.locations.create');

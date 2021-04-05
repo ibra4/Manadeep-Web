@@ -12,7 +12,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon.png') }}">
 
-    <title>Manadeep - {{__('Admin Dashboard')}}</title>
+    <title>Koha - {{__('Admin Dashboard')}}</title>
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

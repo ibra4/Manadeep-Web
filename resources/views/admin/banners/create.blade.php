@@ -15,11 +15,19 @@
 
             <div class="form-group">
                 <label for="name">{{ __('Name') }}</label>
-
-                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
+				<input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
                     value="" required autofocus>
-
-                @error('name')
+				@error('name')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
+            <div class="form-group">
+                <label for="Description">{{ __('Description') }}</label>
+                <input id="Description" type="text" class="form-control @error('Description') is-invalid @enderror" name="Description"
+                       required autofocus>
+                @error('Description')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>

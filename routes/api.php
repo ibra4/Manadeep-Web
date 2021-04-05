@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,105 +15,37 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+
+
+Route::get('/user', function (Request $request) {
+    dd(auth('api'));
+    return "xxxxx";
 });
 
 
-// @todo seperate user and driver login/register
-Route::post('register', 'App\Http\Controllers\Api\RegisterController@register');
-Route::post('login', 'App\Http\Controllers\Api\RegisterController@login');
-Route::middleware('auth:api')->post('phone/verify', 'App\Http\Controllers\Api\RegisterController@verify');
+// @todo 
+Route::post('register', 'App\Http\Controllers\Api\UserController@register');
+Route::post('login', 'App\Http\Controllers\Api\UserController@login');
+Route::post('ForgotPassword', 'App\Http\Controllers\Api\UserController@ForgotPassword');
+Route::post('user/update', 'App\Http\Controllers\Api\UserController@update');
+Route::get('profileData/{phone}', 'App\Http\Controllers\Api\UserController@profileData');
+
+Route::get('GetHomeData', 'App\Http\Controllers\Api\MainController@index');
+Route::post('upload_image', 'App\Http\Controllers\Api\MainController@uploadImage');
+
+Route::post('NewContact', 'App\Http\Controllers\Api\MessagesController@NewContact');
+Route::post('AdminMeesage', 'App\Http\Controllers\Api\MessagesController@NewAdminMessage');
+
+Route::post('Bid/create', 'App\Http\Controllers\Api\BidController@create');
+Route::get('Bid/get', 'App\Http\Controllers\Api\BidController@showBids');
+Route::get('Bid/FinishedBids', 'App\Http\Controllers\Api\BidController@showFinishedBids');
+Route::get('Bid/index', 'App\Http\Controllers\Api\BidController@index');
+Route::get('Bid/Getbid/{id?}', 'App\Http\Controllers\Api\BidController@Getbid');
+Route::post('Bid/AddBid', 'App\Http\Controllers\Api\BidController@AddBid');
 
 /**
  * Get current user
  */
-Route::middleware('auth:api')->get('/user', function () {
-    return auth('api')->user();
-});
-/**
-* Driver Accounting
-*/
-Route::get('/Driver/accounting', 'App\Http\Controllers\Api\Drivers@driver_accounting');
-/**
-* User Accounting
-*/
-Route::get('/Order/accounting', 'App\Http\Controllers\Api\OrdersController@UserAccounting');
-Route::get('/User/accounting', 'App\Http\Controllers\Api\OrdersController@user_accounting');
-/**
- * Get Settings
- */
-Route::get('/settings', 'App\Http\Controllers\Api\SettingsController@get');
-/**
- * Update Settings
- */
-Route::middleware('can:manage-website')->post('/settings/update', 'App\Http\Controllers\Api\SettingsController@update');
-
-/**
- * Get All orders
- */
-Route::middleware('auth:api')->get('/orders/all', 'App\Http\Controllers\Api\OrdersController@getAll');
-
-/**
- * Get active order for user
- */
-Route::middleware('auth:api')->get('/orders/active', 'App\Http\Controllers\Api\OrdersController@getActiveOrder');
-Route::middleware('auth:api')->get('/AssociateOrders/active', 'App\Http\Controllers\Api\associate_orders@getActiveOrder');
-/**
- * Get Single order
- */
-Route::middleware('auth:api')->get('/orders/{id}', 'App\Http\Controllers\Api\OrdersController@getSingle');
-Route::middleware('auth:api')->get('/AssociateOrders/myOrder', 'App\Http\Controllers\Api\associate_orders@MyOrder');
-
-/**
- * Get Single order
- */
-Route::middleware('auth:api')->get('/orders/path/{orderPath}', 'App\Http\Controllers\Api\OrdersController@getByOrderPath');
-
-/**
- * Get orders for user
- */
-Route::middleware('auth:api')->get('/orders', 'App\Http\Controllers\Api\OrdersController@get');
-Route::middleware('auth:api')->get('/AssociateOrders/{id}', 'App\Http\Controllers\Api\associate_orders@get');
-
-Route::middleware('auth:api')->get('/AssociateOrders/hide/{id}', 'App\Http\Controllers\Api\associate_orders@hide');
-/**
- * Add Order
- */
-Route::middleware('auth:api')->post('/orders/add', 'App\Http\Controllers\Api\OrdersController@add');
-Route::middleware('auth:api')->post('/AssociateOrders/add', 'App\Http\Controllers\Api\associate_orders@add');
-
-/**
- * Update order status
- */
-//
-Route::middleware('auth:api')->post('/orders/status/{id}', 'App\Http\Controllers\Api\OrdersController@status');
-Route::middleware('auth:api')->post('/AssociateOrders/update', 'App\Http\Controllers\Api\associate_orders@update');
-/**
- * Rate the order
- */
-Route::middleware('auth:api')->post('/rate/{id?}', 'App\Http\Controllers\Api\RatesController@add');
-
-/**
- * Get current user profile
- */
-Route::middleware('auth:api')->get('/profile', 'App\Http\Controllers\Api\ProfileController@get');
-
-/**
- * Get current user profile
- */
-Route::middleware('auth:api')->get('/Banners', 'App\Http\Controllers\Api\Banners@show');
-
-
-Route::middleware('auth:api')->get('/notification/show', 'App\Http\Controllers\Api\Notifications@show');
-Route::middleware('auth:api')->get('/notification/seen/{id?}', 'App\Http\Controllers\Api\Notifications@seen');
-Route::middleware('auth:api')->get('/notificationNumber', 'App\Http\Controllers\Api\Notifications@notificationNumber');
-/**
- * Update 
- */
-Route::middleware('auth:api')->post('/profile/update', 'App\Http\Controllers\Api\ProfileController@update');
-
-/**
- * Update 
- */
-Route::middleware('auth:api')->post('/profile/image', 'App\Http\Controllers\Api\ProfileController@uploadImage');
+// Route::middleware('auth:api')->get('/user', function () {
+//     return auth('api')->user();
+// });

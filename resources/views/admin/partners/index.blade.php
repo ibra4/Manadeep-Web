@@ -28,32 +28,20 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($partners as $partner)
+                @foreach ($cite as $cite)
                    
                         <tr>
-                            <th scope="row">{{ $partner->id }}</th>
-                            <td>{{ $partner->name }}</td>
-                            <td>{{ $partner->phone_number }}</td>
+                            <th scope="row">{{ $cite->id }}</th>
+                            <td>{{ $cite->name_en }}</td>
+                            <td>{{ $cite->name_en }}</td>
                             <td>
                                 <div class="d-flex justify-content-start" style="justify-content: space-evenly !important;">
                                    
                                   
-                                    <a href="{{ route('admin.partners.edit', $partner->id, [app()->getLocale()]) }}"
+                                    <a href="{{ route('admin.partners.edit', $cite->id, [app()->getLocale()]) }}"
                                         class="btn btn-success">{{ __('Modify Partner') }}
                                     </a>
-                                    
-                                    <form action="{{ route('admin.partners.block' ,  $partner->id ,  [app()->getLocale()]) }}"
-                                        method="POST" class="mx-2">
-                                        @method("PUT")
-                                       	@if ($partner->is_active)
-                                        <button type="submit" onclick="return confirm('{{ __('Are you sure you want to block this partner?') }}'); " class="btn btn-danger">{{ __('Block') }}</button>
-                                        @else
-                                        {{ __('Blocked') }}
-                                        @endif
-                                        @csrf
-                                    </form>
-                                    
-                                    <form action="{{ route('admin.partners.delete' ,  $partner->id ,  [app()->getLocale()]) }}"
+                                    <form action="{{ route('admin.partners.delete' ,  $cite->id ,  [app()->getLocale()]) }}"
                                         method="POST" class="mx-2">
                                         @method("DELETE")
                                         <button type="submit" onclick="return confirm('{{ __('Are you sure you want to delete this partner?') }}'); " class="btn btn-danger">{{ __('Delete') }}</button>

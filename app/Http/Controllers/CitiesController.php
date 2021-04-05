@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\City;
+use App\Models\cite;
 use Illuminate\Http\Request;
 
 class CitiesController extends Controller
@@ -11,7 +11,7 @@ class CitiesController extends Controller
 
     public function index(Request $request)
     {
-        $cities = City::all();
+        $cities = cite::all();
         return view('admin.cities.index')->with('cities', $cities);
     }
 
@@ -51,7 +51,7 @@ class CitiesController extends Controller
         dd("update");
     }
 
-    public function destroy(Request $request, City $city)
+    public function destroy(Request $request, cite $city)
     {
         $city->delete();
         return redirect()->route('cities.index');

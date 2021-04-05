@@ -79,7 +79,18 @@
             </div>
 
 
+   		 <div class="form-group">
+                <label for="estimate_time">{{ __('Estimated Duration (Minutes)') }}</label>
 
+                <input id="estimate_time" type="number" class="form-control @error('estimate_time') is-invalid @enderror"
+                    name="estimate_time" value="{{$pricing->estimate_time}}" required >
+
+                @error('estimate_time')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
 
 
 

@@ -23,6 +23,7 @@
                     <th scope="col">{{ __('Location 1') }}</th>
                     <th scope="col">{{ __('Location 2') }}</th>
                     <th scope="col">{{ __('Price') }}</th>
+                    <th scope="col">{{ __('Duration') }}</th>
 
                     <th scope="col">{{ __('Actions') }}</th>
                 </tr>
@@ -35,6 +36,7 @@
                             <td>{{ $cities[$pricing->city_id_1]['name_en'] }}</td>
                             <td>{{ $cities[$pricing->city_id_2]['name_en'] }}</td>
                             <td>{{ $pricing->price }}</td>
+                            <td>{{ $pricing->estimate_time }}</td>
 
                             <td>
                                 <div class="d-flex justify-content-start" style="justify-content: space-evenly !important;">

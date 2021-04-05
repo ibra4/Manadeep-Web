@@ -7,7 +7,7 @@
     <br><br><br><br>
 <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ __(Session::get('message')) }}</p>
 @endif
-        <h1 class="title py-5">{{ __('Partnership Categories') }}</h1>
+        <h1 class="title py-5">{{ __('Falcon Types') }}</h1>
         <br>
         <div class="pull-right"><a id="addNew" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addNewModal"><i class="fa fa-plus"></i> {{ __('Add New') }}</a></div><br><br>
         <div class="modal fade" id="addNewModal" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel"
@@ -55,7 +55,7 @@
             </thead>
 
             <body>
-                @foreach ($partner_categories as $item)
+                @foreach ($type as $item)
                     <tr>
 
                       <td>

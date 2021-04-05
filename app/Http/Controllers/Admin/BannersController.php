@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Validator;
-
-
+use App\Models\gallery;
+use App\Models\Banner;
 
 class BannersController extends Controller
 {
@@ -20,8 +20,13 @@ class BannersController extends Controller
     {
         
         $banners = \DB::select("select * from banners ");
+        $AllBanners= array();
+        foreach ($banners as $banner){
+            $banner->image='/Koha-Web/public'.$banner->image;
+            $AllBanners[]=$banner;
+        }
         return view('admin.banners.index')
-        ->with('banners', $banners);
+        ->with('banners', $AllBanners);
     }
 
     /**
@@ -31,24 +36,42 @@ class BannersController extends Controller
      */
     public function create(Request $request)
     {
+        
         if($request->hasFile('image'))
         {
             if ($request->file('image')->isValid()) 
             {
-                $file = $request->file('image');
-                $ext = $file->getClientOriginalExtension();
-                $name = md5(time().$file->getClientOriginalName()).".".$ext;
-                if($file->move("/var/www/html/Manadeep-Web/public/files/",$name))
-                {
-                    \DB::insert("insert into banners (name, image ) values ( '{$request->name}', '/files/{$name}' ) ");
+                    $FILES = $_FILES["image"];
                     
+                    //Send error
+                    if ($FILES['error'])
+                    {
+                        return response()->json(['error'=>'Invalid file']);
+                    }
                     
+                    //Change file name
+                    $imageFileType = pathinfo($FILES["name"],PATHINFO_EXTENSION);
+                    $uniqid = uniqid();
+                    $file_path='/files/' . $uniqid .'.'.$imageFileType;
+                    $file = "/var/www/html/Koha-Web/public" .$file_path;
+                    
+                    //Upload file
+                    if(move_uploaded_file($FILES["tmp_name"], $file)){
+//                         $gallery = new gallery();
+//                         $gallery->user_id = $request->input('user_id');
+//                         $gallery->filepath = $file_path;
+//                         $gallery->save();
+                
+                        $Banner= new Banner();
+                        $Banner->name=$request->name;
+                        $Banner->image=$file_path;
+                        $Banner->Description=$request->Description;
+                        $Banner->save();
+                        
                     \Session::flash('message','Banner added successfully');
                     \Session::flash('class', 'alert-success');
                     return redirect()->route('admin.banners', app()->getLocale());
-                }
-               
-                
+                    } 
             }
             else
             {
@@ -66,13 +89,6 @@ class BannersController extends Controller
        
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-   
     public function edit(Request $request, $id)
     {
         if($request->has('name'))
@@ -85,7 +101,7 @@ class BannersController extends Controller
                     $file = $request->file('image');
                     $ext = $file->getClientOriginalExtension();
                     $name = md5(time().$file->getClientOriginalName()).".".$ext;
-                    if($file->move("/var/www/html/Manadeep-Web/public/files/",$name))
+                    if($file->move("/var/www/html/Koha-Web/public/",$name))
                     {
                          \DB::update("update banners set image = '/files/{$name}' where id='{$id}' ");
             
@@ -115,6 +131,7 @@ class BannersController extends Controller
         
         
         $banner = \DB::select("select * from banners where id='{$id}' ");
+        $banner[0]->image='/var/www/html/Koha-Web/public'.$banner[0]->image;
         return view('admin.banners.edit')->with('banner' , $banner[0]);
     }
 
