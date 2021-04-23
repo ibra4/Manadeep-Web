@@ -45,18 +45,18 @@ class UsersController extends Controller
             'user_roles' => $user_roles
         ]);
     }
-    
+
     public function approval($id)
     {
         $user = User::find($id);
         $user->active = '1';
-        
+
         $Email=$this->sendEmail($user->email);
-            
+
         $user->save();
-            \Session::flash('message', $user->name . ' Has been Actived');
+            \Session::flash('message', $user->name . ' Has been activated');
             \Session::flash('class', 'alert-success');
-        
+
         return redirect()->route('admin.users', app()->getLocale());
     }
 
@@ -116,14 +116,14 @@ class UsersController extends Controller
 
     public function Approve(Request $request)
     {
-        
+
         return $request->user();
     }
-    
+
     private function sendEmail($to) {
-        
+
         $mail = new PHPMailer ;
-        
+
         $mail->IsSMTP();
         $mail->Mailer = "smtp";
         $mail->SMTPDebug  = 1;
@@ -133,19 +133,19 @@ class UsersController extends Controller
         $mail->Host       = "smtp.gmail.com";
         $mail->Username   = "app.koha3@gmail.com";
         $mail->Password   = "koha@123";
-        
+
         $mail->IsHTML(true);
         $mail->AddAddress($to);
         $mail->SetFrom("app.koha3@gmail.com", "Koha");
-        $mail->Subject = "your account on Koha app";
-        $mail->Body  = "The admin approved your account for Koha app , you can login now ";
-        
+        $mail->Subject = "Your account on Kokha app";
+        $mail->Body  = "The admin has approved your account for Kokha app, you can login now ";
+
         if(!$mail->Send()) {
             return json_encode(['status' => "ERROR", 'msg' => "Error while sending Email."]);
         } else {
             return json_encode(['status' => "success", 'msg' => "Email sent successfully"]);
         }
-        
-        
+
+
     }
 }
